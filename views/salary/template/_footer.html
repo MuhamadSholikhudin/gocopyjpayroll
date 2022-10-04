@@ -1,0 +1,82 @@
+{{define "_footer"}}
+
+</div>
+</mat-sidenav-content>
+</mat-sidenav-container>
+<!---->
+<simple-notifications>
+    <div class="simple-notification-wrapper bottom right">
+        <!---->
+    </div>
+</simple-notifications>
+</div>
+</app-home>
+<!---->
+</app-root>
+<script src="/static/runtime.js" defer=""></script>
+<script src="/static/polyfills-es5.js" nomodule="" defer=""></script>
+<script src="/static/polyfills.js" defer=""></script>
+<script src="/static/scripts.js" defer=""></script>
+<script src="/static/main.js" defer=""></script>
+
+<!-- <script>
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('firebase-messaging-sw.js')
+.then(() => console.log('service worker installed'))
+.catch(err => console.error('Error', err));
+}
+</script> -->
+<div style="display: none" class="ubey-RecordingScreen-count-down ubey-RecordingScreen-count-down-container">
+    <style>
+        .ubey-RecordingScreen-count-down-container {
+            position: fixed;
+            height: 100vh;
+            width: 100vw;
+            top: 0;
+            left: 0;
+            z-index: 9999999999999;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .ubey-RecordingScreen-count-down-content {
+            position: absolute;
+            display: flex;
+            top: 50%;
+            left: 50%;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            height: 15em;
+            width: 15em;
+            transform: translate(-50%, -100%);
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+        }
+
+        #ubey-RecordingScreen-count-count {
+            font-size: 14em;
+            transform: translateY(-2%);
+        }
+    </style>
+    <div class="ubey-RecordingScreen-count-down-content">
+        <span id="ubey-RecordingScreen-count-count"></span>
+    </div>
+</div>
+<div class="cdk-live-announcer-element cdk-visually-hidden" aria-atomic="true" aria-live="polite"></div>
+<div id="cdk-describedby-message-container" aria-hidden="true" style="display: none;">
+    <div id="cdk-describedby-message-3">KPI</div>
+    <div id="cdk-describedby-message-4">Training</div>
+    <div id="cdk-describedby-message-5">e-Recruitment</div>
+    <div id="cdk-describedby-message-6">Announcement and Policy</div>
+    <div id="cdk-describedby-message-7">3rd Party</div>
+    <div id="cdk-describedby-message-8">Setting</div>
+    <div id="cdk-describedby-message-9">Employee</div>
+    <div id="cdk-describedby-message-16">Inbox</div>
+    <div id="cdk-describedby-message-17">Notification</div>
+    <div id="cdk-describedby-message-18">Time Attendance</div>
+    <div id="cdk-describedby-message-19">Payroll &amp; Tax</div>
+    <div id="cdk-describedby-message-29">Monthly 1 | 2022/09 | Open State</div>
+</div>
+<div class="cdk-overlay-container"></div>
+
+{{end}}

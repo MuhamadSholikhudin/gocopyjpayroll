@@ -1,0 +1,126 @@
+{{define "salaryreport" }}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{{template "_header"}}
+	</head>
+	<body>
+		{{template "_navbar"}}
+		
+		<div style="padding-left: 30px;">
+
+			<p style="font-weight: 200px; font-size: 24px;">Shift Schedule</p>
+
+		   
+			<div style=" border-radius: 3px; box-shadow: 2px 2px 2px 2px #9a5efa46; padding: 8px;">
+			  <p class="mat-tab-label-content" style="margin-top:10px; font-weight: 600; color: #66a0d0;">
+				MONTHLY 1
+			  </p>
+			  <hr>
+			  <div>
+				<span style="font-size: 12px; font-weight: 100; color: muted; font-family: 'Open Sans',sans-serif;">
+				  Periode 
+				</span>
+				  <br>
+				<span id="demo123">2022/12</span>
+				<input type="month" name="" value="2022-09" id="inputmonth" style="width:20px; border: 1px solid white; color:white; size: 20px;" onchange="monthclick();">
+				<p></p>
+				<script>               
+				  function monthclick() {
+					var periodemonth = document.getElementById("inputmonth").value;
+					let result123 = periodemonth.substring(0, 4);
+					let result245 = periodemonth.substring(5, 7);
+					document.getElementById("demo123").innerHTML = result123 + "/" + result245;
+				  }                  
+			  </script>               
+				
+			  </div>
+
+			<div class="editmain">
+			  <div class="coloumn" style="font-weight: 700; color: #66a0d0;">
+				<input type="checkbox" name="grade" id="gradecheckbox" onclick="Gradeclick(this);" style="color: #66a0d0;"/> Grade
+				<script>
+				  function Gradeclick(chk){
+					var gradecheck = document.getElementById("gradecheckbox");
+					if(chk.checked){
+					  document.getElementById("chkgrade1").checked = true;
+					  document.getElementById("chkgrade2").checked = true;
+					  document.getElementById("chkgrade3").checked = true;
+					}else{
+					  document.getElementById("chkgrade1").checked = false;
+					  document.getElementById("chkgrade2").checked = false;
+					  document.getElementById("chkgrade3").checked = false;
+					}
+				  }                      
+				</script>
+
+				<hr>
+				<input type="checkbox" name="grade" id="chkgrade1" style=" color: #66a0d0;"/> <span  style=" color: black; font-weight: 100;">Al - ALL IN</span><br>
+				<input type="checkbox" name="grade" id="chkgrade2" style=" color: #66a0d0;"/> <span style=" color: black; font-weight: 100;">OP - OPERATOR</span> <br>
+				<input type="checkbox" name="grade" id="chkgrade3" style=" color: #66a0d0;"/> <span style=" color: black; font-weight: 100;">TKA - TENAGA ASING</span>
+			  </div>
+			  <div class="coloumn" style=" font-weight: 700; color:#66a0d0;">
+				<input type="checkbox" name="grade" id="ogradecheckbox" onclick="Organizationclick(this);" style="color:#66a0d0;"/> Organization
+				<script>
+				  function Organizationclick(chk){
+					var gradecheck = document.getElementById("gradecheckbox");
+					if(chk.checked){
+					  document.getElementById("chkorganization1").checked = true;
+					  document.getElementById("chkorganization2").checked = true;
+					}else{
+					  document.getElementById("chkorganization1").checked = false;
+					  document.getElementById("chkorganization2").checked = false;
+					}
+				  }                      
+				</script>
+				<hr>
+				<input type="checkbox" name="grade" id="chkorganization1" /> <span  style=" color: black; font-weight: 100;">0 - PRESIDENT DIRECTOR</span><br>
+				<input type="checkbox" name="grade" id="chkorganization2" /> <span style=" color: black; font-weight: 100;">01 - PRESIDENT DIRECTOR (TKA)</span> <br>
+				
+			  </div>
+			  <div class="coloumn" style="font-weight: 700; color: #66a0d0;">
+				  PRESIDEN DIRECTUR
+				  <input type="number" style="height: 11px; width: 0%;  border-top-style: hidden;
+				  border-right-style: hidden;
+				  border-left-style: hidden;
+				  border-bottom-style: white;" name="" id="">
+			   
+				  <hr style="width: 100%;">
+			  </div>
+							  
+		  </div>
+
+		  <div style="
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  height: 50px;
+		  ">
+		  <div _ngcontent-uys-c30="" class="col-xs-12"
+			style="text-align: center;margin-top: 10px; "><button style="background-color: #3f51b5;" _ngcontent-uys-c30=""
+			color="primary" mat-raised-button=""
+			class="mat-raised-button mat-button-base mat-primary"><span
+			  class="mat-button-wrapper" style="color:white;" id="generatecoba" onclick="Generatecoba();">Generate</span>
+			  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+			<script>
+			  function Generatecoba(){
+				var periodemonth = $("#inputmonth").val();
+				url = 'http://localhost:3000/jpayroll/download?periode=' + periodemonth;
+				window.open(url, '_blank');                
+			 }
+			</script>
+			  <div class="mat-button-ripple mat-ripple" matripple="">
+
+			  </div>
+			  <div class="mat-button-focus-overlay"></div>
+			</div>
+		  </div>
+
+		  </div>
+		  </div>
+
+
+		{{template "_footer"}}
+	</body>
+</html>
+{{end}}
