@@ -9,7 +9,8 @@
 		
 		<div style="padding-left: 30px;">
 
-			<p style="font-weight: 200px; font-size: 24px;">Altertion Report</p>	   
+			<p style="font-weight: 200px; font-size: 24px;">Shift Schedule</p>
+
 			<div style=" border-radius: 3px; box-shadow: 2px 2px 2px 2px #9a5efa46; padding: 8px;">
 			  <p class="mat-tab-label-content" style="margin-top:10px; font-weight: 600; color: #66a0d0;">
 				MONTHLY 1
@@ -78,22 +79,12 @@
 			  </div>
 			  <div class="coloumn" style="font-weight: 700; color: #66a0d0;">
 				  PRESIDEN DIRECTUR
-				  <input type="number" style="height: 11px; width: 0%;  border-top-style: hidden;
-				  border-right-style: hidden;
-				  border-left-style: hidden;
-				  border-bottom-style: white;" name="" id="">
-			   
+				  <input type="number" style="height: 11px; width: 0%;  border-top-style: hidden; border-right-style: hidden; border-left-style: hidden; border-bottom-style: white;" name="" id="">
 				  <hr style="width: 100%;">
 			  </div>
-							  
 		  </div>
 
-		  <div style="
-		  display: flex;
-		  justify-content: center;
-		  align-items: center;
-		  height: 50px;
-		  ">
+		  <div style="display: flex; justify-content: center; align-items: center;height: 50px;">
 		  <div _ngcontent-uys-c30="" class="col-xs-12"
 			style="text-align: center;margin-top: 10px; "><button style="background-color: #3f51b5;" _ngcontent-uys-c30=""
 			color="primary" mat-raised-button=""
@@ -103,7 +94,7 @@
 			<script>
 			  function Generatecoba(){
 				var periodemonth = $("#inputmonth").val();
-				url = 'http://localhost:3000/jpayroll/download?periode=' + periodemonth;
+				url = 'http://localhost:3000/jpayroll/salarydownload?periode=' + periodemonth;
 				window.open(url, '_blank');                
 			 }
 			</script>

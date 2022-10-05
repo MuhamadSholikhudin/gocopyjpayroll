@@ -6,15 +6,20 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strconv"
 	"time"
 
-	"github.com/jeypc/go-crud-modal/entities"
-	"github.com/jeypc/go-crud-modal/models/mahasiswamodel"
+	"gocopyjpayroll/entities"
+	"gocopyjpayroll/models/fileprocessmodel"
+	"gocopyjpayroll/models/mahasiswamodel"
 )
 
+var fileprocessModel = fileprocessmodel.New()
 var mahasiswaModel = mahasiswamodel.New()
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +42,17 @@ func SalaryIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var data = M{"name": "Batman"}
+
+	// var tmpl = template.Must(template.ParseFiles(
+	// 	"views/templates/index.html",
+	// 	"views/templates/_header.html",
+	// 	"views/templates/_navbar.html",
+	// 	"views/templates/_footer.html",
+	// 	"views/templates/salaryreport.html",
+	// ))
+
 	err = tmpl.ExecuteTemplate(w, "salaryreport", data)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -53,10 +68,32 @@ func Salary(w http.ResponseWriter, r *http.Request) {
 	temp.Execute(w, data)
 }
 
-func DownloadSalary(w http.ResponseWriter, r *http.Request) {
+// Salary
+func SalaryReport(w http.ResponseWriter, r *http.Request) {
+	type M map[string]interface{}
 
+	var data = M{"name": "HRD"}
+	var tmpl = template.Must(template.ParseFiles(
+		"views/templates/_header.html",
+		"views/templates/_navbar.html",
+		"views/salary/salaryreport.html",
+		"views/templates/_footer.html",
+	))
+
+	var err = tmpl.ExecuteTemplate(w, "salaryreport", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func SalaryDownload(w http.ResponseWriter, r *http.Request) {
 	periode := r.FormValue("periode")
-	path := fmt.Sprintf("C:/go/gocopyjpayroll/files/%s.xlsx", periode)
+	re, err := regexp.Compile(`[^\w]`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	periode = re.ReplaceAllString(periode, "")
+	path := fmt.Sprintf("C:/go/gocopyjpayroll/files/salary/Payroll_Salary_Report_M_%s.xlsx", periode)
 	f, err := os.Open(path)
 	if f != nil {
 		defer f.Close()
@@ -67,13 +104,117 @@ func DownloadSalary(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	time.Sleep(2 * time.Second)
-	contentDisposition := fmt.Sprintf("attachment; filename=%s.xlsx", periode)
+	contentDisposition := fmt.Sprintf("attachment; filename=Payroll_Salary_Report_M_%s.xlsx", periode)
 	w.Header().Set("Content-Disposition", contentDisposition)
 
 	if _, err := io.Copy(w, f); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func SalaryForm(w http.ResponseWriter, r *http.Request) {
+	type K map[string]interface{}
+
+	data := map[string]interface{}{
+		"data": template.HTML(GetDataSalary()),
+	}
+
+	var tmpl = template.Must(template.ParseFiles(
+		"views/templates/_header.html",
+		"views/templates/_navbar.html",
+		"views/salary/salaryform.html",
+		"views/templates/_footer.html",
+	))
+
+	var err = tmpl.ExecuteTemplate(w, "salaryform", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func GetDataSalary() string {
+
+	buffer := &bytes.Buffer{}
+
+	temp, _ := template.New("data.html").Funcs(template.FuncMap{
+		"increment": func(a, b int) int {
+			return a + b
+		},
+	}).ParseFiles("views/salary/data.html")
+
+	var fileprocess []entities.Fileprocess
+	err := fileprocessModel.FindAll(&fileprocess)
+	if err != nil {
+		panic(err)
+	}
+
+	data := map[string]interface{}{
+		"fileprocess": fileprocess,
+	}
+
+	temp.ExecuteTemplate(buffer, "data.html", data)
+
+	return buffer.String()
+}
+
+func SalaryUpload(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(1024); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	periode := r.FormValue("periode")
+	category := r.FormValue("category")
+
+	re, err := regexp.Compile(`[^\w]`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	periode = re.ReplaceAllString(periode, "")
+
+	fmt.Println(periode)
+	fmt.Println(category)
+
+	uploadedFile, handler, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer uploadedFile.Close()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	filename := handler.Filename
+	if category != "" {
+		filename = fmt.Sprintf("Payroll_%s_Report_M_%s%s", category, periode, filepath.Ext(handler.Filename))
+	}
+	fileLocation := filepath.Join(dir, "files/salary", filename)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer targetFile.Close()
+
+	if _, err := io.Copy(targetFile, uploadedFile); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// w.Write([]byte("done"))
+
+	http.Redirect(w, r, "/jpayroll/salaryreport", 301)
 }
 
 func GetData() string {

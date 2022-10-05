@@ -3,8 +3,8 @@ package mahasiswamodel
 import (
 	"database/sql"
 
-	"github.com/jeypc/go-crud-modal/config"
-	"github.com/jeypc/go-crud-modal/entities"
+	"gocopyjpayroll/config"
+	"gocopyjpayroll/entities"
 )
 
 type MahasiswaModel struct {

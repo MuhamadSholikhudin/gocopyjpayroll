@@ -10,7 +10,7 @@ func DBConnection() (*sql.DB, error) {
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbPass := ""
-	dbName := "go_crud_modal"
+	dbName := "gocopyjpayroll"
 
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
 	return db, err

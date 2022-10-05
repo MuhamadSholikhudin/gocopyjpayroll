@@ -1,15 +1,17 @@
 {{ $nomor := 0 }}
-{{ range .mahasiswa }}
+{{ range .fileprocess }}
     <tr>
         {{ $nomor = increment $nomor 1 }}
         <td>{{ $nomor }}</td>
-        <td>{{ .NamaLengkap }}</td>
-        <td>{{ .JenisKelamin }}</td>
-        <td>{{ .TempatLahir }}, {{ .TanggalLahir }}</td>
-        <td>{{ .Alamat }}</td>
+        <td>{{ .Periode }}</td>
+        <td>{{ .File }}</td>
+        <td>{{ .Category }}</td>
+        <td> {{ .CreatedAt }}</td>
+        <td>{{ .UpdatedAt }}</td>
         <td>
-            <button data-id="{{ .Id }}" class="btn btn-danger btn-sm delete-mahasiswa">Delete</button>
-            <button data-id="{{ .Id }}" class="btn btn-warning btn-sm edit-mahasiswa">Edit</button>
+            <button data-id="{{ .Id }}" style="cursor: pointer; padding:7px; height:30px; background-color:#b1d84d; color:white; border-radius:4px; outline-color: white;">
+                @ Edit
+            </button>
         </td>
     </tr>
 {{ end }}
