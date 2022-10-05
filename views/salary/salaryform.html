@@ -21,10 +21,14 @@
 					+ Salary
 				</button>
 			</p>
+
+			<div id="htmlmodalsalary">
+
+			</div>
 			<!-- The Modal -->
 			<div id="modaladdsalary" class="modaladdsalary">
 				<!-- Modal content -->
-				<div class="modaladdsalary-content">
+				<!-- <div class="modaladdsalary-content">
 					<span class="close">&times;</span>
 					<center>
 						<h3 style=" color: #66a0d0;">ADD DATA SALARY BY PERIODE</h3>
@@ -32,20 +36,22 @@
 					<center>
 						<form action="/jpayroll/salaryupload" method="POST" enctype="multipart/form-data">
 							<label for="periode">Periode</label>
-							<input type="month" name="periode" id="" class="inputmodalsalary">
+							<input type="month" name="periode" id="" class="inputmodalsalary" required>
 							&nbsp;&nbsp;&nbsp;&nbsp;
 							<label for="file">File</label>
-							<input type="file" name="file" id="" class="inputmodalsalary">
+							<input type="file" name="file" id="" class="inputmodalsalary" required>
 							&nbsp;&nbsp;&nbsp;&nbsp;
 							<label for="category">Category</label>
-							<select name="category" id="" class="inputmodalsalary">
+							<select name="category" id="" class="inputmodalsalary" required>
 								<option value="Salary">Salary</option>
 							</select>
 							<br>
-							<button type="submit" style="cursor: pointer; padding:3px; height:30px; border-radius:3px; background-color:#66a0d0; color:white;">Submit</button>
+							<button type="submit"
+								style="cursor: pointer; padding:3px; height:30px; border-radius:3px; background-color:#66a0d0; color:white;">Submit</button>
 						</form>
 					</center>
-				</div>
+				</div> -->
+
 			</div>
 
 			<script>
@@ -74,6 +80,22 @@
 						modal.style.display = "none";
 					}
 				}
+
+				var site_url = "http://localhost:3000/";
+
+				$('.add-mahasiswa').click(function () {
+					$.get(site_url + "jpayroll/salaryedit", function (html) {
+						$('#modaladdsalary').html(html).modal('show')
+					});
+				});
+
+				$(document).on('click', '.edit-mahasiswa', function () {
+					var id = $(this).attr('data-id');
+					$.get(site_url + "jpayroll/salaryedit?id=" + id, function (html) {
+						$('#modaladdsalary').html(html).modal('show')
+					});
+				});
+
 			</script>
 
 			<hr>

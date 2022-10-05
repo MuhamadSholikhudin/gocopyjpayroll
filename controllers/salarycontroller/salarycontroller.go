@@ -43,14 +43,6 @@ func SalaryIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	var data = M{"name": "Batman"}
 
-	// var tmpl = template.Must(template.ParseFiles(
-	// 	"views/templates/index.html",
-	// 	"views/templates/_header.html",
-	// 	"views/templates/_navbar.html",
-	// 	"views/templates/_footer.html",
-	// 	"views/templates/salaryreport.html",
-	// ))
-
 	err = tmpl.ExecuteTemplate(w, "salaryreport", data)
 
 	if err != nil {
@@ -93,7 +85,7 @@ func SalaryDownload(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	periode = re.ReplaceAllString(periode, "")
-	path := fmt.Sprintf("C:/go/gocopyjpayroll/files/salary/Payroll_Salary_Report_M_%s.xlsx", periode)
+	path := fmt.Sprintf("D:/go/gocopyjpayroll/files/salary/Payroll_Salary_Report_M_%s.xlsx", periode)
 	f, err := os.Open(path)
 	if f != nil {
 		defer f.Close()
@@ -199,6 +191,19 @@ func SalaryUpload(w http.ResponseWriter, r *http.Request) {
 	if category != "" {
 		filename = fmt.Sprintf("Payroll_%s_Report_M_%s%s", category, periode, filepath.Ext(handler.Filename))
 	}
+
+	var fileprocess entities.Fileprocess
+
+	fileprocess.Periode = periode
+	fileprocess.Category = category
+	fileprocess.File = filename
+
+	err = fileprocessModel.Create(&fileprocess)
+	if err != nil {
+		ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
 	fileLocation := filepath.Join(dir, "files/salary", filename)
 	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
@@ -215,6 +220,41 @@ func SalaryUpload(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte("done"))
 
 	http.Redirect(w, r, "/jpayroll/salaryreport", 301)
+}
+
+func newFunction(fileprocess entities.Fileprocess) error {
+	err := fileprocessModel.Create(&fileprocess)
+	return err
+}
+
+func GetEdit(w http.ResponseWriter, r *http.Request) {
+
+	queryString := r.URL.Query()
+	id, err := strconv.ParseInt(queryString.Get("id"), 10, 64)
+
+	var data map[string]interface{}
+	var fileprocess entities.Fileprocess
+
+	if err != nil {
+		data = map[string]interface{}{
+			"title":       "Tambah Data File Processs",
+			"fileprocess": fileprocess,
+		}
+	} else {
+
+		err := fileprocessModel.Find(id, &fileprocess)
+		if err != nil {
+			panic(err)
+		}
+
+		data = map[string]interface{}{
+			"title":       "Edit Data fileprocess",
+			"fileprocess": fileprocess,
+		}
+	}
+
+	temp, _ := template.ParseFiles("views/salary/editform.html")
+	temp.Execute(w, data)
 }
 
 func GetData() string {
