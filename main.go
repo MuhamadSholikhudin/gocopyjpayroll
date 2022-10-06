@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	alterationcontroller "gocopyjpayroll/controllers/alterationcontroller"
+	attendancecontroller "gocopyjpayroll/controllers/attendancecontroller"
+	customcontroller "gocopyjpayroll/controllers/customcontroller"
 	salarycontroller "gocopyjpayroll/controllers/salarycontroller"
 )
 
@@ -14,41 +17,34 @@ func main() {
 			http.FileServer(http.Dir("assets"))))
 
 	http.HandleFunc("/", salarycontroller.SalaryReport)
-	http.HandleFunc("/salaryindex", salarycontroller.SalaryIndex)
-	http.HandleFunc("/salary/get_form", salarycontroller.GetForm)
-	http.HandleFunc("/salary/store", salarycontroller.Store)
-	http.HandleFunc("/salary/delete", salarycontroller.Delete)
-
-	http.HandleFunc("/jpayroll/salary", salarycontroller.Salary)
-	// http.HandleFunc("/jpayroll/download", salarycontroller.DownloadSalary)
 
 	//Salary
 	http.HandleFunc("/jpayroll/salaryreport", salarycontroller.SalaryReport)
 	http.HandleFunc("/jpayroll/salarydownload", salarycontroller.SalaryDownload)
 	http.HandleFunc("/jpayroll/salaryform", salarycontroller.SalaryForm)
 	http.HandleFunc("/jpayroll/salaryupload", salarycontroller.SalaryUpload)
-	// http.HandleFunc("/jpayroll/salaryedit", salarycontroller.SalaryEdit)
+	http.HandleFunc("/jpayroll/salaryedit", salarycontroller.SalaryEdit)
 	// http.HandleFunc("/jpayroll/salarupdate", salarycontroller.SalaryUpdate)
 
 	//Alteration
-	// http.HandleFunc("/jpayroll/alterationreport", alterationcontroller.AlterationReport)
-	// http.HandleFunc("/jpayroll/alterationdownload", alterationcontroller.AlterationDownload)
+	http.HandleFunc("/jpayroll/alterationreport", alterationcontroller.AlterationReport)
+	http.HandleFunc("/jpayroll/alterationdownload", alterationcontroller.AlterationDownload)
 	// http.HandleFunc("/jpayroll/alterationform", alterationcontroller.AlterationForm)
 	// http.HandleFunc("/jpayroll/alterationupload", alterationcontroller.AlterationUpload)
 	// http.HandleFunc("/jpayroll/alterationedit", alterationcontroller.AlterationEdit)
 	// http.HandleFunc("/jpayroll/alterationupdate", alterationcontroller.AlterationUpdate)
 
 	//Attandance
-	// http.HandleFunc("/jpayroll/attandancereport", attandancecontroller.AttandanceReport)
-	// http.HandleFunc("/jpayroll/attandancedownload", attandancecontroller.AttandanceDownload)
+	http.HandleFunc("/jpayroll/attendancereport", attendancecontroller.AttendanceReport)
+	http.HandleFunc("/jpayroll/attendancedownload", attendancecontroller.AttendanceDownload)
 	// http.HandleFunc("/jpayroll/attandanceform", attandancecontroller.AttandanceForm)
 	// http.HandleFunc("/jpayroll/attandanceupload", attandancecontroller.AttandanceUpload)
 	// http.HandleFunc("/jpayroll/attandanceedit", attandancecontroller.AttandanceEdit)
 	// http.HandleFunc("/jpayroll/attandanceupdate", attandancecontroller.AttandanceUpdate)
 
 	//Custom
-	// http.HandleFunc("/jpayroll/customreport", customcontroller.CustomReport)
-	// http.HandleFunc("/jpayroll/customdownload", customcontroller.CustomDownload)
+	http.HandleFunc("/jpayroll/customreport", customcontroller.CustomReport)
+	http.HandleFunc("/jpayroll/customdownload", customcontroller.CustomDownload)
 	// http.HandleFunc("/jpayroll/customform", customcontroller.CustomForm)
 	// http.HandleFunc("/jpayroll/customupload", customcontroller.CustomUpload)
 	// http.HandleFunc("/jpayroll/customedit", customcontroller.CustomEdit)
