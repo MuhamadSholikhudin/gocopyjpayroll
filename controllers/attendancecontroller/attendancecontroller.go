@@ -42,7 +42,7 @@ func AttendanceDownload(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	periode = re.ReplaceAllString(periode, "")
-	path := fmt.Sprintf("C:/go/gocopyjpayroll/files/attendance/Payroll_Alteration_Report_M%s.xlsx", periode)
+	path := fmt.Sprintf("C:/go/gocopyjpayroll/files/attendance/Attendence_Shift_Schedule_AttendanceReport_%s.xlsx", periode)
 	f, err := os.Open(path)
 	if f != nil {
 		defer f.Close()
@@ -54,7 +54,7 @@ func AttendanceDownload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	time.Sleep(2 * time.Second)
-	contentDisposition := fmt.Sprintf("attachment; filename=Salary_Report_M_%s.xlsx", periode)
+	contentDisposition := fmt.Sprintf("attachment; filename=Attendence_Shift_Schedule_AttendanceReport_%s.xlsx", periode)
 	w.Header().Set("Content-Disposition", contentDisposition)
 
 	if _, err := io.Copy(w, f); err != nil {

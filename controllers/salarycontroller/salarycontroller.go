@@ -177,8 +177,6 @@ func SalaryUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// w.Write([]byte("done"))
-
 	http.Redirect(w, r, "/jpayroll/salaryreport", 301)
 }
 
